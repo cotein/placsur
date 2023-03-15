@@ -9,6 +9,7 @@ use App\Src\Models\ProviderRegimen;
 
 class ProviderRepository
 {
+    
     public function create($pr)
     {
         DB::beginTransaction();
@@ -49,10 +50,35 @@ class ProviderRepository
             $provider->save();
             $provider->refresh();
             
-            if (array_key_exists('city', $pr['address'])) {
-                $city = City::where('name', $pr['address']['city'])->get()->first()->id;
+            if (array_key_exists('city', $pr['address'])) { 
+                if (is_null($pr['address']['city'])) {
+                    $city = null;
+                    $city_name = null;
+                }else{
+
+                    $c = City::where('name', $pr['address']['city'])->get();
+
+                    if ($c->isEmpty()) {
+                        $new_city = new City;
+                        $new_city->state_id = $pr['address']['state']['id'];
+                        $new_city->name = strtoupper($pr['address']['city']);
+                        $new_city->cp = strtoupper($pr['address']['cp']);
+                        $new_city->save();
+                        $new_city->fresh();
+
+                        $city = $new_city->id;
+                        $city_name = $new_city->name;
+
+                    }else{
+
+                        $c = City::where('name', $pr['address']['city'])->get()->first()->id;
+                        $city = $c->id;
+                        $city_name = $c->name;
+                    }
+                }
             }else{
                 $city = null;
+                $city_name = null;
             }
  
             if (! is_null($pr['address']['address']) && ! is_null($pr['address']['number'])) {
@@ -62,6 +88,7 @@ class ProviderRepository
                     'type_id' => $pr['address']['type']['id'],
                     'province_id' => 1,
                     'city_id' => $city,
+                    'city' => $city_name,
                     'address' => $pr['address']['address'],
                     'number' => $pr['address']['number'],
                     'cp' => $pr['address']['cp'],

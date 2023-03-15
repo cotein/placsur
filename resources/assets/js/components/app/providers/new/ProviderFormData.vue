@@ -134,7 +134,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-2 text-center">
+                    <!-- <div class="col-md-2 text-center">
                         <label class="control-label" >Cuenta Contable</label>
                         <p>
                             <button
@@ -144,7 +144,7 @@
                                 NUEVA
                             </button>
                         </p>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>

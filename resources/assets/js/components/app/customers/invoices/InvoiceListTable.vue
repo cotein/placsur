@@ -52,21 +52,22 @@
                 <div class="col-md-2">
                     <div class="form-group">
                         <label class="col-sm-3 control-label">Desde</label>
-                        <datepicker 
-                            :language="es"
-                            :value="date"
-                            v-model="date_from"
-                        ></datepicker>
+                        <date-picker 
+                            v-model="date_from"  
+                            format="DD-MM-YYYY"
+                            :lang="lang"
+                        />
                     </div>
                 </div>
                 <div class="col-md-2">
                     <div class="form-group">
                         <label class="col-sm-3 control-label">Hasta</label>
-                        <datepicker 
-                            :language="es"
-                            :value="date"
-                            v-model="date_to"
-                        ></datepicker>
+                        <date-picker
+                        class="input--form"
+                            v-model="date_to"  
+                            format="DD-MM-YYYY"
+                            :lang="lang"
+                        />
                     </div>
                 </div>
                 <div class="pd-t-20">
@@ -112,16 +113,15 @@
 </template>
 
 <script>
+import DatePicker from 'vue2-datepicker';
+import 'vue2-datepicker/index.css';
     import {Event} from 'vue-tables-2';
     import {mapGetters} from 'vuex';
     import Paginate from 'vuejs-paginate';
     import cell_date from './PartialCellDate';
     import Multiselect from 'vue-multiselect';
     import Loading from 'vue-loading-overlay';
-    import Datepicker from 'vuejs-datepicker';
-    import {es} from 'vuejs-datepicker/dist/locale';
     import Excel from './../../../../src/Excel/Excel';
-    import ExcelInvoices from './../../../../src/Excel/ExcelInvoices';
     import 'vue-loading-overlay/dist/vue-loading.css';
     import cell_print from './PartialCellPrintInvoice';
     import InvoiceListChildRow from './InvoiceListChildRow';
@@ -130,17 +130,56 @@
     export default {
         
         components : {
-            Paginate, InvoiceListChildRow, Multiselect, Datepicker, Loading
+            Paginate, InvoiceListChildRow, Multiselect, DatePicker, Loading
         },
 
         mixins : [asyc_find_customer],
 
         data() {
             return {
-                es : es,
+                lang: {
+                // the locale of formatting and parsing function
+                    formatLocale: {
+                        // MMMM
+                        months: ['Enero', 'Febreo', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+                        // MMM
+                        monthsShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+                        // dddd
+                        weekdays: ['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sábado'],
+                        // ddd
+                        weekdaysShort: ['Dom', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sáb'],
+                        // dd
+                        weekdaysMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sá'],
+                        // first day of week
+                        firstDayOfWeek: 1,
+                        // first week contains January 1st.
+                        firstWeekContainsDate: 1,
+                        // format 'a', 'A'
+                        /* meridiem: (h: Number, _: Number, isLowercase: boolean) {
+                            const word = h < 12 ? 'AM' : 'PM';
+                            return isLowercase ? word.toLocaleLowerCase() : word;
+                        }, */
+                        // parse ampm
+                        //meridiemParse: /[ap]\.?m?\.?/i;
+                        // parse ampm
+                        /* isPM: (input: string) {
+                            return `${input}`.toLowerCase().charAt(0) === 'p';
+                        } */
+                    },
+                    // the calendar header, default formatLocale.weekdaysMin
+                    days: [],
+                    // the calendar months, default formatLocale.monthsShort
+                    months: [],
+                    // the calendar title of year
+                    yearFormat: 'YYYY',
+                    // the calendar title of month
+                    monthFormat: 'MMM',
+                    // the calendar title of month before year
+                    monthBeforeYear: false,
+                },
                 msg : 'Cargando datos... ',
                 date : new Date(),
-                date_from : new Date(2020,0,1),
+                date_from : new Date(),
                 date_to :  new Date(),
                 loading : false,
                 spinner : false,

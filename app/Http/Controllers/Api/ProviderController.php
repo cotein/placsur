@@ -45,8 +45,18 @@ class ProviderController extends Controller
 
         $pr = request()->all();
 
-        $supplier = $this->pRepo->create($pr['provider']);
+        $prov = $this->pRepo->create($pr['provider']);
+        
+        $array_data = [
+            'provider_id' => $prov->id,
+            'log_name' => strtoupper('crea proveedor'),
+            'status_id' => $prov->status_id,
+            'user_id' => auth()->user()->id,
+            'data' => $prov->toArray(),
+        ];
 
-        return response()->json($supplier, 201);
+        save_history($prov, $array_data);
+
+        return response()->json($prov, 201);
     }
 }
