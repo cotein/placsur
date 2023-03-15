@@ -146,7 +146,7 @@ Vue.component('date_picker_widget', require('./widgets/date-picker-widget.vue').
 
 /** COMPRAS */
 Vue.component('purchase_invoice_base', require('./components/app/providers/purchase_invoice/PurchaseInvoiceBase.vue').default);
-//Vue.component('provider_base', require('./components/app/providers/new/ProviderBase.vue').default);
+Vue.component('provider_base', require('./components/app/providers/new/ProviderBase.vue').default);
 //Vue.component('provider_list_vouchers', require('./components/app/providers/purchase_invoice/list/PurchaseInvoiceListBase').default);
 Vue.component('purchase_invoice_to_pay', require('./components/app/providers/purchase_invoice/to_pay/PurchaseInvoiceToPayBase').default);
 //Vue.component('receipt_to_provider_base', require('./components/app/providers/receipts/ReceiptToProviderBase.vue').default);

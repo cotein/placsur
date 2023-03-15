@@ -38,13 +38,15 @@ class ProviderController extends Controller
             'provider.purchase_document.id.required' => 'El campo Documento Tipo es requerido.',   
             'provider.sublevel_accounting_account.id.required' => 'El campo Cuenta Gastos es requerido.',   
         ]);
+
         if ($validator->fails()) {    
             return response()->json($validator->messages(), 422);
         }
-        //dd(request()->provider);
-        $pr = request()->all();
-        $prov = $this->pRepo->create($pr['provider']);
 
-        return response()->json($prov, 201);
+        $pr = request()->all();
+
+        $supplier = $this->pRepo->create($pr['provider']);
+
+        return response()->json($supplier, 201);
     }
 }

@@ -9,16 +9,21 @@ use App\Src\Models\ProviderRegimen;
 
 class ProviderRepository
 {
-    
     public function create($pr)
     {
+        DB::beginTransaction();
+
+        try {
             $provider = new Provider;
             
-            if (is_null($pr['regimen']['code'])) {
-                $regimen = null;
+            if (array_key_exists( 'regimen', $pr )) {
+                if (is_null($pr['regimen'])) {
+                    $regimen = null;
+                }else{
+                    $regimen = ProviderRegimen::where('code', $pr['regimen']['code'])->get()->first()->id;
+                }
             }else{
-
-                $regimen = ProviderRegimen::where('code', $pr['regimen']['code'])->get()->first()->id;
+                $regimen = null;
             }
 
             $provider->name = $pr['name'];
@@ -64,7 +69,21 @@ class ProviderRepository
                     'obs' => array_key_exists('obs', $pr['address']) ? $pr['address']['obs'] : null,
                 ]);
             }
+
+            DB::commit();
+
             return $provider;
+
+        } catch (\Exception  $e) {
+
+            DB::rollback();
+
+            activity('CREAR PROVEEDOR')
+                ->withProperties( [ 'Proveedor' => $pr ] )
+                ->log( "Mensaje: {$e->getMessage()} - Línea: {$e->getLine()} - Código: {$e->getCode()}" );
+                
+            throw $e;
+        }
     }
 
     public function find_by_name($query)

@@ -41080,7 +41080,7 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! /home/coto/Github/asaliah.com.ar/mi-sistema-con-mercado-libre/resources/assets/js/client.js */"./resources/assets/js/client.js");
+module.exports = __webpack_require__(/*! /home/coto/Github/placsur/mi-sistema-con-mercado-libre/resources/assets/js/client.js */"./resources/assets/js/client.js");
 
 
 /***/ })

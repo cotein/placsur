@@ -32,11 +32,14 @@ import toast_mixin from './../../../../mixins/toast-mixin';
 import WsPucResponse from './../../../../src/Afip/WsPucResponse';
 import VueAutonumeric from '../../../../../../../node_modules/vue-autonumeric/src/components/VueAutonumeric';
 export default {
+
     mixins : [auth, toast_mixin, sleep_mixin],
+
     components : {
         Multiselect, VueAutonumeric, SearchPersonOnAfip, ProviderFormData, ProviderAddress, ProviderContact,
         ProviderTaxes
     },
+
     data() {
         return {
             spinner : false
@@ -46,12 +49,27 @@ export default {
     methods : {
 
         async store_provider () {
+
             this.$store.commit('SET_PROVIDER_ERRORS', {});
+
             this.spinner = true;
-            this.sleep(500);
-            let provider = await this.$store.dispatch('store_provider', this.User.token)
+
+            await this.sleep(500);
+
+            const provider = await this.$store.dispatch('store_provider', this.User.token)
                 .catch((error) => {
+
                     this.$store.commit('SET_PROVIDER_ERRORS', error.response.data);
+
+                    Vue.swal.fire({
+
+                        title: 'AGREGAR PROVEEDOR',
+                        text: 'Ha ocurrido un error al guardar el proveedor',
+                        icon : 'error',
+                        confirmButtonText: 'Aceptar',
+
+                    })
+                    
                 }).finally(()=>this.spinner = false);
             
             if (provider) {
@@ -67,13 +85,13 @@ export default {
     
     computed : {
         ...mapGetters([
-            'Provinces',
-            'ProviderName',
-            'ProviderTipoClave',
-            'PurchaserDocuments',
-            'ProviderAddressProvince',
             'GetPersonWSPUC',
-            'ProviderRegimen'
+            'ProviderAddressProvince',
+            'ProviderName',
+            'ProviderRegimen',
+            'ProviderTipoClave',
+            'Provinces',
+            'PurchaserDocuments',
         ]),
     },
 
