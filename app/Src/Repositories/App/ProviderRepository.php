@@ -71,7 +71,7 @@ class ProviderRepository
 
                     }else{
 
-                        $c = City::where('name', $pr['address']['city'])->get()->first()->id;
+                        $c = City::where('name', $pr['address']['city'])->get()->first();
                         $city = $c->id;
                         $city_name = $c->name;
                     }
